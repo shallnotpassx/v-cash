@@ -11,14 +11,10 @@
             "id": "149e4add5cff6e68",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "PLAN.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "PLAN"
+              "title": "新标签页"
             }
           }
         ]
@@ -185,18 +181,23 @@
   },
   "active": "149e4add5cff6e68",
   "lastOpenFiles": [
-    "README.md",
-    "LICENSE",
-    "v-cash-api/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst",
-    "v-cash-api/target/classes/com/gongbotao/vcash/VCashApplication.class",
-    "v-cash-api/target/classes/com/gongbotao/vcash",
-    "v-cash-api/target/classes/com/gongbotao",
-    "v-cash-api/target/classes/com",
-    "v-cash-api/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst",
-    "v-cash-api/target/maven-status/maven-compiler-plugin/compile/default-compile",
-    "v-cash-api/target/maven-status/maven-compiler-plugin/compile",
-    "v-cash-api/target/maven-status/maven-compiler-plugin",
+    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst",
+    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst",
+    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin/compile/default-compile",
+    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin/compile",
+    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin",
+    "v-cash-infrastructure/target/maven-status",
+    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/persistence/mapper/StockFinancialMapper.class",
+    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/persistence/repository/StockRepository.class",
+    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/persistence/mapper/StockBasicMapper.class",
+    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/tushare/TushareAdapter.class",
+    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/persistence/repository",
     "TEST_REPORT.md",
+    "SETUP.md",
+    "PLAN.md",
+    "AGENTS.md",
+    "test.md",
+    "README.md",
     "target/reports/images/profiles/sandbox.png",
     "target/reports/images/profiles/retired.png",
     "target/reports/images/profiles/pre-release.png",
@@ -206,9 +207,6 @@
     "target/reports/images/window-new.png",
     "target/reports/images/update.gif",
     "target/reports/images/rss.png",
-    "target/reports/images/remove.gif",
-    "SETUP.md",
-    "AGENTS.md",
-    "PLAN.md"
+    "target/reports/images/remove.gif"
   ]
 }
