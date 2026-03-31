@@ -1,0 +1,8 @@
+com/gongbotao/vcash/infrastructure/config/MyBatisPlusConfig$1.class
+com/gongbotao/vcash/infrastructure/persistence/mapper/StockFinancialMapper.class
+com/gongbotao/vcash/infrastructure/config/RestTemplateConfig.class
+com/gongbotao/vcash/infrastructure/config/MyBatisPlusConfig.class
+com/gongbotao/vcash/infrastructure/eastmoney/EastMoneyStockAdapter.class
+com/gongbotao/vcash/infrastructure/persistence/repository/StockRepository.class
+com/gongbotao/vcash/infrastructure/tushare/TushareAdapter.class
+com/gongbotao/vcash/infrastructure/persistence/mapper/StockBasicMapper.class

@@ -1,0 +1,7 @@
+/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-infrastructure/src/main/java/com/gongbotao/vcash/infrastructure/eastmoney/EastMoneyStockAdapter.java
+/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-infrastructure/src/main/java/com/gongbotao/vcash/infrastructure/persistence/mapper/StockBasicMapper.java
+/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-infrastructure/src/main/java/com/gongbotao/vcash/infrastructure/tushare/TushareAdapter.java
+/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-infrastructure/src/main/java/com/gongbotao/vcash/infrastructure/config/MyBatisPlusConfig.java
+/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-infrastructure/src/main/java/com/gongbotao/vcash/infrastructure/persistence/mapper/StockFinancialMapper.java
+/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-infrastructure/src/main/java/com/gongbotao/vcash/infrastructure/config/RestTemplateConfig.java
+/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-infrastructure/src/main/java/com/gongbotao/vcash/infrastructure/persistence/repository/StockRepository.java
