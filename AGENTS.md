@@ -1,192 +1,64 @@
-# v-cash 智能体说明
+# v-cash AGENTS.md
 
 ## 项目概述
 
-v-cash 是一个股票数据查询与分析系统，用于获取A股和港股的财务数据及公司公告信息。
+股票数据查询与分析系统，获取A股/港股财务数据及公告信息。
 
-## 智能体角色
+- **后端**: Spring Boot 3.2.5, JDK 17, MyBatis Plus 3.5.5, MySQL 8.0
+- **前端**: Vue 3 (待开发)
+- **构建**: Maven 多模块
+- **数据源**: Tushare Pro、东方财富 API
 
-### 1. 项目架构师 (Project Architect)
-- **职责**: 整体技术方案设计、技术选型决策
-- **主要任务**:
-  - 制定项目架构和技术栈
-  - 设计数据库模型
-  - 规划API接口
-  - 制定开发规范
+## 项目结构
 
-### 2. 后端开发 (Backend Developer)
-- **职责**: Spring Boot 后端开发
-- **主要任务**:
-  - 领域模型设计
-  - 数据源适配器实现
-  - 应用服务开发
-  - REST API接口开发
-  - 定时任务开发
-
-### 3. 前端开发 (Frontend Developer)
-- **职责**: Vue 3 前端开发
-- **主要任务**:
-  - 前端项目初始化
-  - 页面组件开发
-  - API调用封装
-  - 前后端联调
-
-### 4. 数据库管理员 (DBA)
-- **职责**: 数据库设计与管理
-- **主要任务**:
-  - 数据库表结构设计
-  - SQL脚本编写
-  - 数据库性能优化
-
-## 架构设计 (DDD领域驱动设计)
-
-### 分层架构
 ```
-com.gongbotao.vcash
-├── domain/               # 领域层 - 核心业务逻辑
-│   ├── stock/            # 股票领域
-│   │   ├── entity/       # 实体（聚合根）
-│   │   ├── valueobject/  # 值对象
-│   │   ├── repository/   # 仓储接口
-│   │   └── service/      # 领域服务
-│   ├── financial/        # 财务领域
-│   │   ├── entity/
-│   │   ├── valueobject/
-│   │   ├── repository/
-│   │   └── service/
-│   ├── announcement/     # 公告领域
-│   │   ├── entity/
-│   │   ├── valueobject/
-│   │   ├── repository/
-│   │   └── service/
-│   └── enums/            # 共享枚举
-├── application/          # 应用层 - 用例编排
-│   ├── stock/
-│   │   ├── command/      # 命令对象
-│   │   ├── query/        # 查询对象
-│   │   └── service/      # 应用服务
-│   ├── financial/
-│   └── announcement/
-├── infrastructure/        # 基础设施层
-│   ├── adapter/          # 外部数据源适配器
-│   │   ├── tushare/
-│   │   ├── eastmoney/
-│   │   └── cninfo/
-│   ├── persistence/      # 持久化实现
-│   │   ├── mapper/       # MyBatis映射
-│   │   └── repository/   # 仓储实现
-│   └── config/           # 配置类
-├── api/                  # 接口层
-│   └── controller/       # REST控制器
-└── task/                 # 定时任务
+v-cash/
+├── v-cash-domain/          # 领域层 - 实体、仓储接口、领域服务
+├── v-cash-application/     # 应用层 - 用例编排、应用服务
+├── v-cash-infrastructure/  # 基础设施层 - 适配器、持久化、配置
+├── v-cash-api/             # 接口层 - REST 控制器、启动类
+├── vcash-web/              # 前端 (待开发)
+├── src/                    # Legacy 单模块代码 (逐步迁移中)
+└── sql/init.sql            # 数据库初始化脚本
 ```
 
-### DDD核心概念
+## DDD 分层规则
 
-#### 1. 实体 (Entity)
-- 有唯一标识的对象
-- 如：StockBasic、StockFinancial、StockAnnouncement
+- **领域层** 不依赖任何其它层
+- **应用层** 只依赖领域层
+- **基础设施层** 依赖领域层 + 应用层
+- **接口层** 依赖应用层 + 基础设施层
 
-#### 2. 值对象 (Value Object)
-- 无唯一标识，属性不可变
-- 如：StockCode、Market、Money
-
-#### 3. 聚合根 (Aggregate Root)
-- 聚合的根节点，负责维护聚合内部一致性
-- 外部对象只能通过聚合根访问内部实体
-
-#### 4. 仓储接口 (Repository)
-- 定义在领域层，声明持久化方法
-- 基础设施层实现具体的持久化逻辑
-
-#### 5. 领域服务 (Domain Service)
-- 承载跨聚合的业务逻辑
-- 负责协调多个实体/聚合之间的交互
-
-#### 6. 应用服务 (Application Service)
-- 编排领域服务，实现用例
-- 处理事务、参数校验、DTO转换
-
-### 领域划分
-
-#### 股票领域 (Stock)
-- 聚合：Stock
-- 实体：StockBasic
-- 仓储接口：IStockRepository
-- 领域服务：StockDomainService
-
-#### 财务领域 (Financial)
-- 聚合：Financial
-- 实体：StockFinancial
-- 仓储接口：IFinancialRepository
-
-#### 公告领域 (Announcement)
-- 聚合：Announcement
-- 实体：StockAnnouncement
-- 仓储接口：IAnnouncementRepository
-
-## 模块划分 (Legacy)
-
-### 后端模块
-```
-com.gongbotao.vcash
-├── domain/           # 领域模型
-│   ├── entity/       # 实体类
-│   ├── dto/          # 数据传输对象
-│   └── enums/        # 枚举类
-├── data/             # 数据层
-│   ├── source/       # 数据源适配器
-│   │   ├── adapter/  # 适配器接口
-│   │   ├── tushare/  # Tushare实现
-│   │   ├── eastmoney/ # 东方财富实现
-│   │   └── cninfo/   # 巨潮资讯实现
-│   └── storage/      # 数据库操作
-│       ├── mapper/   # MyBatis映射
-│       └── repository/ # 仓储实现
-├── service/          # 业务逻辑
-│   ├── stock/        # 股票服务
-│   ├── financial/    # 财务数据服务
-│   └── announcement/ # 公告服务
-├── task/             # 定时任务
-├── config/           # 配置类
-└── controller/       # 接口层
-```
-
-### 前端模块
-```
-vcash-web/src/
-├── api/              # API调用
-├── components/       # 公共组件
-├── views/            # 页面视图
-├── router/           # 路由配置
-└── store/            # 状态管理
-```
-
-## 协作流程
-
-1. **架构师** 完成技术方案设计
-2. **DBA** 创建数据库表结构
-3. **后端开发** 实现领域模型和仓储
-4. **后端开发** 实现应用服务和API接口
-5. **前端开发** 开发前端页面
-6. **前后端联调** 完成系统集成
+关键概念：
+- 实体有唯一标识（StockBasic、StockFinancial、StockAnnouncement）
+- 仓储接口定义在领域层，实现在基础设施层
+- 领域服务处理跨聚合逻辑，应用服务编排用例
 
 ## 开发规范
 
-- 代码风格遵循阿里巴巴Java开发规约
-- 使用Git进行版本管理
-- 提交信息采用 Conventional Commits 格式
-- 代码审查采用Pull Request流程
-- 每次完成新的功能开发后，都更新PLAN.md文件
-- **DDD规范**：
-  - 领域层不能依赖Infrastructure层
-  - 应用层依赖领域层，不依赖基础设施
-  - 领域服务处理跨聚合逻辑
-  - 应用服务编排用例，处理事务
+- 代码风格：阿里巴巴 Java 开发规约
+- Git 提交：Conventional Commits 格式（feat/fix/docs/chore 等）
+- 每次完成功能后更新 PLAN.md
+- 新代码写入 DDD 多模块，不再修改 `src/` Legacy 代码
 
-## 数据库规范
+## 数据库
 
-- **禁止使用 root 用户连接数据库**，必须创建专用用户
-- 应用使用最小权限原则，只授予必要的库权限
-- 用户名统一使用项目名或开发者名，密码使用强密码
-- 数据库配置文件禁止提交到版本控制系统
+- 用户：`gongbotao` / `123456`（禁止使用 root）
+- 数据库：`vcash`
+- 表：`stock_basic`、`stock_financial`、`stock_announcement`
+- 逻辑删除：`deleted` 字段（0=正常，1=删除）
+- 自动填充：`createTime`、`updateTime`
+
+## 测试
+
+- 框架：JUnit 5 + Mockito
+- 测试用例文档：`TEST_CASES.md`
+- 现有测试：`src/test/java/` 下 StockServiceTest、FinancialServiceTest
+- 新测试应写在对应模块的 `src/test/java/` 目录下
+
+## 关键约定
+
+- 适配器采用策略+兜底模式：按顺序尝试，返回第一个成功结果
+- 保存采用 upsert 模式：存在则更新，不存在则插入
+- 金融金额使用 `BigDecimal`
+- 端口：8089
