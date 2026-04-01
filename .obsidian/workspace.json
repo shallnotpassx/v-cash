@@ -1,14 +1,14 @@
 {
   "main": {
-    "id": "291eda7ca57576c3",
+    "id": "7a957cfeaf5b2fbd",
     "type": "split",
     "children": [
       {
-        "id": "b6438179c4f4fa68",
+        "id": "3edbbdd6b949d300",
         "type": "tabs",
         "children": [
           {
-            "id": "149e4add5cff6e68",
+            "id": "4eb1e3a9baa6c152",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -23,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "996c06c355a25819",
+    "id": "68ee1c0cf9bded89",
     "type": "split",
     "children": [
       {
-        "id": "497dfefeff264ffb",
+        "id": "d239e8d0b08fba15",
         "type": "tabs",
         "children": [
           {
-            "id": "163d3902be55a244",
+            "id": "62484aecdde6fa17",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -44,7 +44,7 @@
             }
           },
           {
-            "id": "4d9c57942bee8d0c",
+            "id": "f6d110908b53cf6e",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -61,7 +61,7 @@
             }
           },
           {
-            "id": "6e875733a58fe597",
+            "id": "8bd6fafb46ca6c77",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -77,20 +77,19 @@
     "width": 300
   },
   "right": {
-    "id": "e083c9b837e9150c",
+    "id": "23b83634c794a99d",
     "type": "split",
     "children": [
       {
-        "id": "4e5282a96f36d3ae",
+        "id": "739ec7e9e78bfebb",
         "type": "tabs",
         "children": [
           {
-            "id": "29fcd894c427de2e",
+            "id": "b58378e8b9b0c11c",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "AGENTS.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -100,25 +99,24 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "AGENTS 的反向链接列表"
+              "title": "反向链接"
             }
           },
           {
-            "id": "a8fb1333dc4eef01",
+            "id": "c2ba14420b7b4203",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "AGENTS.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "AGENTS 的出链列表"
+              "title": "出链"
             }
           },
           {
-            "id": "fe0f71e63c6b82d4",
+            "id": "e44382e071f5e577",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -133,7 +131,7 @@
             }
           },
           {
-            "id": "c4e882255612f118",
+            "id": "0c634d02f71b4afd",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -147,18 +145,17 @@
             }
           },
           {
-            "id": "0fa6737aeaa20a0f",
+            "id": "bb9b21238fcd1c62",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "AGENTS.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "AGENTS 的大纲"
+              "title": "大纲"
             }
           }
         ]
@@ -179,34 +176,6 @@
       "bases:新建数据库": false
     }
   },
-  "active": "149e4add5cff6e68",
-  "lastOpenFiles": [
-    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst",
-    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst",
-    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin/compile/default-compile",
-    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin/compile",
-    "v-cash-infrastructure/target/maven-status/maven-compiler-plugin",
-    "v-cash-infrastructure/target/maven-status",
-    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/persistence/mapper/StockFinancialMapper.class",
-    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/persistence/repository/StockRepository.class",
-    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/persistence/mapper/StockBasicMapper.class",
-    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/tushare/TushareAdapter.class",
-    "v-cash-infrastructure/target/classes/com/gongbotao/vcash/infrastructure/persistence/repository",
-    "TEST_REPORT.md",
-    "SETUP.md",
-    "PLAN.md",
-    "AGENTS.md",
-    "test.md",
-    "README.md",
-    "target/reports/images/profiles/sandbox.png",
-    "target/reports/images/profiles/retired.png",
-    "target/reports/images/profiles/pre-release.png",
-    "target/reports/images/logos/maven-feather.png",
-    "target/reports/images/logos/build-by-maven-white.png",
-    "target/reports/images/logos/build-by-maven-black.png",
-    "target/reports/images/window-new.png",
-    "target/reports/images/update.gif",
-    "target/reports/images/rss.png",
-    "target/reports/images/remove.gif"
-  ]
+  "active": "4eb1e3a9baa6c152",
+  "lastOpenFiles": []
 }
