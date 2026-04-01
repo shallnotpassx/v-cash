@@ -1,8 +1,0 @@
-/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-domain/src/main/java/com/gongbotao/vcash/domain/financial/entity/StockFinancial.java
-/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-domain/src/main/java/com/gongbotao/vcash/domain/stock/entity/StockBasic.java
-/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-domain/src/main/java/com/gongbotao/vcash/domain/announcement/repository/IAnnouncementRepository.java
-/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-domain/src/main/java/com/gongbotao/vcash/domain/announcement/entity/StockAnnouncement.java
-/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-domain/src/main/java/com/gongbotao/vcash/domain/stock/adapter/StockDataAdapter.java
-/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-domain/src/main/java/com/gongbotao/vcash/domain/stock/service/StockDomainService.java
-/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-domain/src/main/java/com/gongbotao/vcash/domain/financial/repository/IFinancialRepository.java
-/Users/gongbotao/Java/project/gongbotao/v-cash/v-cash-domain/src/main/java/com/gongbotao/vcash/domain/stock/repository/IStockRepository.java
