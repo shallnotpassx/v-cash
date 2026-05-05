@@ -20,8 +20,10 @@
 | 构建工具 | Maven | 3.9.x |
 
 ### 2.2 部署方案
-- 部署环境: 阿里云ECS
-- 部署方式: 前后端分离，后端打包为jar运行
+- 部署方式: 本地 Docker 容器编排 (docker-compose)
+- 后端: Spring Boot jar 打包为 Docker 镜像
+- 前端: Nginx 容器托管 Vue 3 构建产物
+- 数据库: MySQL 8.0 容器 + 自动初始化
 
 ## 3. 功能模块
 
@@ -105,62 +107,98 @@
 ## 6. API设计
 
 ### 6.1 股票接口
-- `GET /api/stock/list` - 股票列表
+- `GET /api/stock/list?market=A|HK` - 股票列表（支持按市场过滤）
+- `GET /api/stock/list?keyword=xxx` - 按名称/代码搜索股票
 - `GET /api/stock/{code}` - 股票详情
+- `POST /api/stock/refresh?market=A|HK` - 手动刷新股票列表
 
 ### 6.2 财务数据接口
-- `GET /api/financial/{stockCode}` - 获取财务数据
+- `GET /api/financial/{stockCode}` - 获取历史财务数据
 - `GET /api/financial/{stockCode}/latest` - 最新财务数据
+- `POST /api/financial/{stockCode}/refresh` - 手动刷新财务数据
 
 ### 6.3 公告接口
 - `GET /api/announcement/{stockCode}` - 获取公告列表
-- `GET /api/announcement/{stockCode}/latest` - 最新公告
-
-### 6.4 数据更新接口
-- `POST /api/refresh/financial` - 手动刷新财务数据
-- `POST /api/refresh/announcement` - 手动刷新公告
+- `GET /api/announcement/{stockCode}?type=xxx` - 按类型筛选公告
+- `POST /api/announcement/{stockCode}/refresh` - 手动刷新公告
 
 ## 7. 项目进度
 
-### ✅ Phase 1: 基础框架 (已完成)
-- [x] 项目初始化（Maven配置）
-- [x] Spring Boot基础配置
+### ✅ 已完成 (旧体系迁移)
+- [x] 项目初始化（Maven 多模块配置）
+- [x] Spring Boot 基础配置 + MyBatis Plus 配置
 - [x] 数据库环境搭建（sql/init.sql）
-- [x] 后端包结构创建
-  - domain/entity/ - 实体类
-  - domain/enums/ - 枚举类
-  - data/storage/mapper/ - MyBatis Mapper
-  - config/ - 配置类
-- [x] 前端项目目录结构
+- [x] DDD 四层架构搭建（domain / application / infrastructure / api）
+- [x] 股票后端核心: Entity + 仓储接口/实现 + 领域服务 + 应用服务
+- [x] 数据源适配: StockDataAdapter 接口 + TushareAdapter + EastMoneyStockAdapter
+- [x] 财务后端核心: Entity + 仓储接口
+- [x] 公告后端核心: Entity + 仓储接口
+- [x] Legacy 单模块代码移除，全部迁移到 DDD 多模块
 
-### Phase 2: 核心功能 (已完成)
-- [x] 股票数据模型定义
-- [x] 数据源适配层实现
-  - [x] StockDataAdapter 接口
-  - [x] TushareAdapter 实现
-  - [x] EastMoneyStockAdapter 实现
-- [x] 财务数据获取功能
-  - [x] StockService
-  - [x] FinancialService
+---
 
-### Phase 3: 公告功能 (待开发)
-- [ ] 公告数据模型
-- [ ] 公告获取功能
-- [ ] 定时任务配置
+### Phase 0: 项目骨架搭通 (当前)
 
-### Phase 4: 后端接口层 (待开发)
-- [ ] REST API开发
+- [x] StockController 实现（列表/详情/刷新接口）
 - [ ] 前端项目初始化
+  - [ ] Vue 3 + Vite + Element Plus 项目搭建
+  - [ ] Axios 请求封装
+  - [ ] 路由配置 + 基础布局
+- [ ] 股票模块全链路验证
+  - [ ] 股票列表页开发（表格展示代码/名称/市场/行业）
+  - [ ] 股票详情页开发（展示股票基本信息）
+  - [ ] 刷新按钮联动后端 API
+  - [ ] 前后端联调验证
 
-### Phase 5: 前端开发 (待开发)
-- [ ] Vue 3 项目初始化
-- [ ] 页面组件开发
-- [ ] API调用封装
-- [ ] 前后端联调
+### Phase 1: 股票模块功能补全
 
-### Phase 6: 部署 (待开发)
-- [ ] ECS部署配置
-- [ ] 数据源配置优化
+| 功能点 | 后端 | 前端 |
+|--------|------|------|
+| F1: 按名称/代码搜索股票 | IStockRepository.findByKeyword() + listByKeyword() | 列表页搜索框 |
+| F2: 定时自动同步股票列表 | StockSyncTask @Scheduled 每日同步 | 后台执行 |
+
+### Phase 2: 财务模块开发
+
+- [ ] 后端基础建设
+  - [ ] FinancialRepository 实现 IFinancialRepository（upsert 模式）
+  - [ ] FinancialDomainService（适配器编排）
+  - [ ] FinancialApplicationService（业务编排）
+  - [ ] FinancialController（REST 接口）
+
+| 功能点 | 后端 | 前端 |
+|--------|------|------|
+| F3: 查看历史财务数据 | FinancialApplicationService.listByStockCode() | 财务表格页（多期 revenue/netProfit/roe/pe/pb） |
+| F4: 查看最新财务指标 | FinancialApplicationService.getLatestByStockCode() | 股票详情页嵌入指标卡片 |
+| F5: 手动刷新财务数据 | POST /api/financial/{stockCode}/refresh | 详情页刷新按钮 |
+| F6: 定时自动同步财务 | FinancialSyncTask @Scheduled | 后台执行 |
+
+### Phase 3: 公告模块开发
+
+- [ ] 后端基础建设
+  - [ ] AnnouncementMapper（MyBatis Plus BaseMapper）
+  - [ ] AnnouncementRepository 实现 IAnnouncementRepository
+  - [ ] AnnouncementDataAdapter 接口 + CninfoAdapter + EastMoneyAnnouncementAdapter
+  - [ ] AnnouncementDomainService（适配器编排）
+  - [ ] AnnouncementApplicationService（业务编排）
+  - [ ] AnnouncementController（REST 接口）
+
+| 功能点 | 后端 | 前端 |
+|--------|------|------|
+| F7: 查看公告列表 | AnnouncementApplicationService.listByStockCode() | 公告列表页 |
+| F8: 按公告类型筛选 | 同上 + type 参数过滤 | 列表页筛选下拉框 |
+| F9: 查看公告原文 | 返回 source_url | 列表页"查看原文"链接 |
+| F10: 手动刷新公告 | POST /api/announcement/{stockCode}/refresh | 刷新按钮 |
+| F11: 定时自动同步公告 | AnnouncementSyncTask @Scheduled | 后台执行 |
+
+### Phase 4: 本地 Docker 部署
+
+| 功能点 | 说明 |
+|--------|------|
+| F12: Docker 化后端 | 编写 Dockerfile，Spring Boot jar 打包镜像 |
+| F13: Docker 化前端 | Nginx 容器托管 Vue 3 构建产物 |
+| F14: MySQL 容器 | docker-compose 编排 MySQL 8.0 + 自动初始化 |
+| F15: docker-compose 一键启动 | 三容器编排，网络互通，端口映射 |
+| F16: 本地验证 | 浏览器访问确认全链路正常 |
 
 ## 8. 风险与应对
 
@@ -172,52 +210,53 @@
 
 ## 9. 项目结构
 
-### 后端 (Spring Boot)
+### 后端 (Spring Boot DDD)
 ```
 v-cash/
 ├── pom.xml
 ├── sql/
 │   └── init.sql
-├── src/main/
-│   ├── java/com/gongbotao/vcash/
-│   │   ├── VCashApplication.java
-│   │   ├── domain/
-│   │   │   ├── entity/          # 实体类
-│   │   │   └── enums/            # 枚举类
-│   │   ├── data/
-│   │   │   ├── source/           # 数据源适配器
-│   │   │   │   ├── adapter/      # 适配器接口
-│   │   │   │   ├── tushare/      # Tushare实现
-│   │   │   │   ├── eastmoney/    # 东方财富实现
-│   │   │   │   └── cninfo/       # 巨潮资讯实现
-│   │   │   └── storage/          # 数据库操作
-│   │   │       ├── mapper/       # MyBatis映射
-│   │   │       └── repository/   # 仓储实现
-│   │   ├── service/              # 业务逻辑
-│   │   │   ├── stock/
-│   │   │   ├── financial/
-│   │   │   └── announcement/
-│   │   ├── task/                 # 定时任务
-│   │   ├── config/               # 配置类
-│   │   └── controller/          # 接口层
-│   └── resources/
-│       └── application.yml
-```
-
-### 前端 (Vue 3)
-```
-vcash-web/                      # 前端项目
-├── src/
-│   ├── api/                    # API调用
-│   ├── components/             # 公共组件
-│   ├── views/                  # 页面视图
-│   │   ├── stock/              # 股票页面
-│   │   ├── financial/          # 财务数据页面
-│   │   └── announcement/        # 公告页面
-│   ├── router/                 # 路由配置
-│   ├── store/                  # 状态管理
-│   └── assets/                 # 静态资源
-├── index.html
-├── vite.config.js
-└── package.json
+├── v-cash-domain/              # 领域层
+│   └── src/main/java/com/gongbotao/vcash/domain/
+│       ├── stock/
+│       │   ├── entity/StockBasic.java
+│       │   ├── repository/IStockRepository.java
+│       │   ├── service/StockDomainService.java
+│       │   └── adapter/StockDataAdapter.java
+│       ├── financial/
+│       │   ├── entity/StockFinancial.java
+│       │   └── repository/IFinancialRepository.java
+│       └── announcement/
+│           ├── entity/StockAnnouncement.java
+│           └── repository/IAnnouncementRepository.java
+├── v-cash-application/         # 应用层
+│   └── src/main/java/com/gongbotao/vcash/application/
+│       └── stock/service/StockApplicationService.java
+├── v-cash-infrastructure/      # 基础设施层
+│   └── src/main/java/com/gongbotao/vcash/infrastructure/
+│       ├── config/
+│       ├── tushare/TushareAdapter.java
+│       ├── eastmoney/EastMoneyStockAdapter.java
+│       └── persistence/
+│           ├── mapper/
+│           └── repository/
+├── v-cash-api/                 # 接口层
+│   └── src/main/java/com/gongbotao/vcash/
+│       ├── VCashApplication.java
+│       └── controller/StockController.java
+├── docs/
+│   ├── PLAN.md
+│   ├── SETUP.md
+│   ├── TEST_CASES.md
+│   └── TEST_REPORT.md
+└── vcash-web/                  # 前端 (Vue 3)
+    ├── src/
+    │   ├── api/
+    │   ├── components/
+    │   ├── views/
+    │   ├── router/
+    │   └── assets/
+    ├── index.html
+    ├── vite.config.js
+    └── package.json
 ```
