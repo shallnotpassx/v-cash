@@ -137,18 +137,18 @@
 
 ---
 
-### Phase 0: 项目骨架搭通 (当前)
+### Phase 0: 项目骨架搭通 ✅
 
 - [x] StockController 实现（列表/详情/刷新接口）
-- [ ] 前端项目初始化
-  - [ ] Vue 3 + Vite + Element Plus 项目搭建
-  - [ ] Axios 请求封装
-  - [ ] 路由配置 + 基础布局
-- [ ] 股票模块全链路验证
-  - [ ] 股票列表页开发（表格展示代码/名称/市场/行业）
-  - [ ] 股票详情页开发（展示股票基本信息）
-  - [ ] 刷新按钮联动后端 API
-  - [ ] 前后端联调验证
+- [x] 前端项目初始化
+  - [x] Vue 3 + Vite + Element Plus 项目搭建
+  - [x] Axios 请求封装
+  - [x] 路由配置 + 基础布局
+- [x] 股票模块全链路验证
+  - [x] 股票列表页开发（表格展示代码/名称/市场/行业）
+  - [x] 股票详情页开发（展示股票基本信息）
+  - [x] 刷新按钮联动后端 API
+  - [ ] 前后端联调验证（待部署后验证）
 
 ### Phase 1: 股票模块功能补全
 
@@ -249,13 +249,17 @@ v-cash/
 │   ├── SETUP.md
 │   ├── TEST_CASES.md
 │   └── TEST_REPORT.md
-└── vcash-web/                  # 前端 (Vue 3)
+└── vcash-web/                  # 前端 (Vue 3 + Vite + Element Plus)
     ├── src/
     │   ├── api/
-    │   ├── components/
-    │   ├── views/
+    │   │   └── index.js
     │   ├── router/
-    │   └── assets/
+    │   │   └── index.js
+    │   ├── views/
+    │   │   ├── StockList.vue
+    │   │   └── StockDetail.vue
+    │   ├── App.vue
+    │   └── main.js
     ├── index.html
     ├── vite.config.js
     └── package.json
