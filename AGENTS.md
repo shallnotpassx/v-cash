@@ -47,7 +47,7 @@ v-cash/
 
 | 文件 | 何时更新 |
 |------|----------|
-| `openspec/changes/<name>/tasks.md` | 始终：标记 `- [ ]` → `- [x]` |
+| `docs/openspec/changes/<name>/tasks.md` | 始终：标记 `- [ ]` → `- [x]` |
 | `README.md` | 新增 API / 表结构 / 数据源 / 技术栈变更时 |
 | `AGENTS.md` | 新增约定 / 配置 / 开发规范变更时 |
 | `docs/PLAN.md` | 完成一个 Phase 时更新进度状态 |

@@ -18,3 +18,15 @@
 #### Scenario: Search with market filter
 - **WHEN** 用户请求 `GET /api/stock/list?keyword=银行&market=A`
 - **THEN** 系统返回同时匹配关键字和市场条件的股票（交集）
+
+#### Scenario: Empty keyword returns all
+- **WHEN** 用户请求 `GET /api/stock/list?keyword=`
+- **THEN** 系统返回全部股票，等同于不传 keyword
+
+#### Scenario: No results
+- **WHEN** 用户请求 `GET /api/stock/list?keyword=不存在`
+- **THEN** 系统返回空列表 `[]`，HTTP 200
+
+#### Scenario: Case-insensitive matching
+- **WHEN** 用户请求 `GET /api/stock/list?keyword=sh`
+- **THEN** 系统对大小写均进行匹配（数据库 LIKE 默认大小写不敏感）
