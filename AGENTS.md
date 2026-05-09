@@ -17,9 +17,10 @@ v-cash/
 ├── v-cash-application/     # 应用层 - 用例编排、应用服务
 ├── v-cash-infrastructure/  # 基础设施层 - 适配器、持久化、配置
 ├── v-cash-api/             # 接口层 - REST 控制器、启动类
-├── vcash-web/              # 前端 (待开发)
-├── src/                    # Legacy 单模块代码 (逐步迁移中)
-└── sql/init.sql            # 数据库初始化脚本
+├── vcash-web/              # 前端
+├── sql/init.sql            # 数据库初始化脚本
+└── docs/
+    └── openspec/           # OpenSpec 规范 - spec 定义 + 变更追踪
 ```
 
 ## DDD 分层规则
@@ -55,6 +56,32 @@ v-cash/
 - 测试用例文档：`TEST_CASES.md`
 - 现有测试：`src/test/java/` 下 StockServiceTest、FinancialServiceTest
 - 新测试应写在对应模块的 `src/test/java/` 目录下
+
+## OpenSpec 规范驱动开发
+
+规范文件位于 `docs/openspec/`，每个变更走 **propose → apply → archive** 三阶段：
+
+| 阶段 | 命令 | 产出 |
+|------|------|------|
+| Propose | `openspec new change <name>` | proposal.md + specs/ + design.md + tasks.md |
+| Apply | 按 tasks.md 逐项实现 | 实现代码 + 标记任务完成 |
+| Archive | `openspec archive <name>` | 归档到 `changes/archive/` |
+
+### 工作流
+
+1. **创建变更**：`npx openspec new change <kebab-case-name> --description "..."`（在工作区目录下执行时指定 `docs/openspec` 路径）
+2. **编写 artifact**：按模板完成 proposal → specs → design → tasks
+3. **实现**：按 tasks.md 逐项实现，每完成一项标记 `- [x]`
+4. **归档**：实现完成后执行 archive
+
+### 文件约定
+
+| 文件 | 内容 | 说明 |
+|------|------|------|
+| `proposal.md` | 动机、变更范围、能力列表 | 需求变更时更新 |
+| `specs/<capability>/spec.md` | 详细需求（SHALL/MUST + 场景） | 新能力/需求变更时更新 |
+| `design.md` | 技术方案、架构决策、风险 | 方案调整时更新 |
+| `tasks.md` | 可执行任务清单（`- [ ]`） | 每完成一项标记 |
 
 ## 关键约定
 
