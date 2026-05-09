@@ -57,3 +57,6 @@ git-push.log
 # Node (for vcash-web frontend)
 vcash-web/node_modules/
 vcash-web/dist/
+
+# OpenCode local config
+.opencode/
