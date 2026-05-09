@@ -41,6 +41,18 @@ v-cash/
 - Git 提交：Conventional Commits 格式（feat/fix/docs/chore 等）
 - 新代码写入 DDD 多模块，不再修改 `src/` Legacy 代码
 
+## 任务完成检查清单
+
+每完成一个 OpenSpec 任务（tasks.md 中的一项），必须同步更新以下文件：
+
+| 文件 | 何时更新 |
+|------|----------|
+| `openspec/changes/<name>/tasks.md` | 始终：标记 `- [ ]` → `- [x]` |
+| `README.md` | 新增 API / 表结构 / 数据源 / 技术栈变更时 |
+| `AGENTS.md` | 新增约定 / 配置 / 开发规范变更时 |
+| `docs/PLAN.md` | 完成一个 Phase 时更新进度状态 |
+| `docs/openspec/` 相关 artifacts | 需求/设计/任务变更时 |
+
 ## 数据库
 
 - 用户：`gongbotao` / `123456`（禁止使用 root）
