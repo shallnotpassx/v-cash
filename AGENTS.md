@@ -5,7 +5,7 @@
 股票数据查询与分析系统，获取A股/港股财务数据及公告信息。
 
 - **后端**: Spring Boot 3.2.5, JDK 17, MyBatis Plus 3.5.5, MySQL 8.0
-- **前端**: Vue 3 (待开发)
+- **前端**: Vue 3 + Element Plus
 - **构建**: Maven 多模块
 - **数据源**: Tushare Pro、东方财富 API
 
@@ -39,7 +39,6 @@ v-cash/
 
 - 代码风格：阿里巴巴 Java 开发规约
 - Git 提交：Conventional Commits 格式（feat/fix/docs/chore 等）
-- 每次完成功能后更新 PLAN.md
 - 新代码写入 DDD 多模块，不再修改 `src/` Legacy 代码
 
 ## 数据库
