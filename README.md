@@ -1,127 +1,116 @@
 # v-cash
 
-股票数据查询与分析系统，提供 A 股/港股财务数据及公告信息。
+v-cash 是一个面向个人使用场景的股票数据查询与筛选项目，目标是把 A 股和港股的基础资料、财务数据、公告信息统一到本地，支持后续按财务指标筛选股票并查看个股历史明细。
 
-## 技术栈
+## 当前状态
 
-| 层级 | 技术 | 版本 |
-|------|------|------|
-| 后端 | Spring Boot | 3.2.5 |
-| JDK | Eclipse Temurin | 17 |
-| ORM | MyBatis Plus | 3.5.5 |
-| 数据库 | MySQL | 8.0 |
-| 前端 | Vue 3 + Element Plus | 3.4.x |
-| 构建 | Maven | 3.9.x |
-| 部署 | Docker Compose | - |
+当前仓库处于**规划和骨架阶段**。
 
-## 项目结构
+现在已经明确的是项目方向、能力边界和目录结构；业务功能还没有进入正式实现阶段。
 
-```
-v-cash/
-├── v-cash-domain/          # 领域层 - 实体、仓储接口、领域服务
-├── v-cash-application/     # 应用层 - 用例编排、应用服务
-├── v-cash-infrastructure/  # 基础设施层 - 适配器、持久化、配置
-├── v-cash-api/             # 接口层 - REST 控制器、启动类
-├── vcash-web/              # 前端 Vue 3
-├── sql/init.sql            # 数据库初始化脚本
-└── docs/
-    ├── openspec/           # OpenSpec 规范
-    ├── PLAN.md             # 项目路线图
-    ├── SETUP.md            # 环境搭建
-    ├── TEST_CASES.md       # 测试用例
-    └── TEST_REPORT.md      # 测试报告
-```
+## 这个项目要解决什么问题
 
-## 数据源
+这个项目不是量化交易系统，也不是全市场高频分析平台。
 
-| 功能 | 首选 | 备选 |
-|------|------|------|
-| A 股财务 | Tushare Pro | 东方财富 |
-| 港股财务 | 东方财富 | Tushare Pro |
-| A 股公告 | 巨潮资讯网 | 东方财富 |
-| 港股公告 | 东方财富 | - |
+它主要解决下面几件事：
 
-适配器采用策略 + 兜底模式：按顺序尝试，返回第一个成功结果。
+- 把你关心的 A 股 / 港股公司数据拉到本地
+- 统一保存股票、财务和公告数据
+- 支持按多个财务指标组合筛选股票
+- 支持点进个股查看历史财务和公告
+- 当结构化财务数据拿不到时，允许用公告或年报 PDF 做人工辅助提取
 
-## 数据库设计
+## 项目怎么工作
 
-### stock_basic — 股票基本信息
+项目默认采用“本地优先”的方式：
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | BIGINT | 主键 |
-| stock_code | VARCHAR(20) | 股票代码 |
-| stock_name | VARCHAR(100) | 股票名称 |
-| market | VARCHAR(20) | 市场（A/HK） |
-| industry | VARCHAR(100) | 所属行业 |
-| list_date | DATE | 上市日期 |
-| deleted | TINYINT | 逻辑删除（0=正常，1=删除） |
-| create_time | DATETIME | 创建时间 |
-| update_time | DATETIME | 更新时间 |
+- 查询默认只查本地库
+- 本地没有时，不自动回源
+- 由用户手动触发“按指定代码拉取”
+- 手动同步是主链路
+- 定时同步只是辅助能力
 
-### stock_financial — 财务数据
+## 计划中的核心能力
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | BIGINT | 主键 |
-| stock_id | BIGINT | 股票 ID |
-| report_period | DATE | 报告期 |
-| revenue | DECIMAL(20,2) | 营业收入 |
-| net_profit | DECIMAL(20,2) | 净利润 |
-| roe | DECIMAL(10,4) | ROE |
-| pe | DECIMAL(10,4) | 市盈率 |
-| pb | DECIMAL(10,4) | 市净率 |
-| create_time | DATETIME | 创建时间 |
+### 1. 股票主数据
 
-### stock_announcement — 公告信息
+- 支持 A 股 / 港股股票身份统一管理
+- 使用 `market + stock_code` 作为内部主标识
+- 支持本地股票列表、详情和基础搜索
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | BIGINT | 主键 |
-| stock_id | BIGINT | 股票 ID |
-| title | VARCHAR(500) | 公告标题 |
-| announcement_type | VARCHAR(50) | 公告类型 |
-| publish_date | DATE | 发布日期 |
-| source_url | VARCHAR(500) | 原文链接 |
-| create_time | DATETIME | 创建时间 |
+### 2. 数据拉取与同步
 
-## API 文档
+- 接入免费优先的数据源
+- 按指定代码手动拉取数据
+- 支持批量刷新和辅助性定时同步
 
-### 股票接口
+### 3. 财务筛选
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/stock/list?market=A/HK&keyword=xxx` | 股票列表（按市场过滤 + 关键字搜索） |
-| GET | `/api/stock/{code}` | 股票详情 |
-| POST | `/api/stock/refresh?market=A/HK` | 手动刷新股票列表 |
+- 保存历史财务数据
+- 保存最新财务筛选快照
+- 支持多指标组合筛选
+- 支持从个股详情查看历史财务
 
-### 财务数据接口
+### 4. 公告中心
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/financial/{stockCode}` | 历史财务数据 |
-| GET | `/api/financial/{stockCode}/latest` | 最新财务指标 |
-| POST | `/api/financial/{stockCode}/refresh` | 手动刷新财务数据 |
+- 支持 A 股 / 港股公告查询
+- 支持公告列表、类型筛选、原文链接
+- 给年报和公告文档解析提供来源
 
-### 公告接口
+### 5. 部署
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/announcement/{stockCode}?type=xxx` | 公告列表（按类型筛选） |
-| POST | `/api/announcement/{stockCode}/refresh` | 手动刷新公告 |
+- 前期以本地 Windows 机器为主
+- 使用 Docker Compose 启动前端、后端和 MySQL
+- 后续可以迁移到 NAS 或 VPS
 
-## 启动方式
+## 数据源策略
 
-### 本地开发
+当前规划的优先级如下：
 
-分别启动后端（JDK 17 + Maven）和前端（Node.js 18+）。
+- A 股 / 港股基础资料与财务数据：优先东方财富
+- A 股公告：优先巨潮资讯
+- 港股公告：优先 HKEXnews
+- Tushare 作为后续增强源，不是一期开局必须依赖的主源
 
-### Docker 部署
+## 存储策略
 
-```bash
-docker-compose up -d
-```
+主存储计划使用 MySQL。
 
-访问 `http://localhost` 即可使用。
+财务数据会按用途拆开：
 
-详细环境搭建见 [SETUP.md](docs/SETUP.md)。
+- 股票主表
+- 财务历史表
+- 财务筛选快照表
+
+这样可以保证：
+
+- 多指标筛选直接查快照表
+- 个股详情再查历史表
+
+## 文档解析兜底
+
+当结构化财务数据拿不到时，项目允许使用公告或年报 PDF 做财务指标提取。
+
+这条链路只作为**人工辅助**，不会直接自动写入正式财务结果。
+
+## 当前 OpenSpec 结构
+
+项目的可执行 spec 只保留在 `docs/openspec/changes/` 下。
+
+当前规划的能力域有：
+
+- `stock-registry`
+- `data-ingestion-sync`
+- `financial-screening`
+- `announcement-center`
+- `deployment`
+
+## 预期部署方式
+
+项目最终仍然是一个前后端分离的单体系统：
+
+- 一个 Spring Boot 后端应用
+- 一个 Vue 3 前端应用
+- 一个 MySQL 实例
+
+Docker Compose 负责把它们组织起来。

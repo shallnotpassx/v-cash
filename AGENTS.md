@@ -1,102 +1,135 @@
 # v-cash AGENTS.md
 
-## 项目概述
+## 项目定位
 
-股票数据查询与分析系统，获取A股/港股财务数据及公告信息。
+这是一个面向个人使用场景的 A 股 / 港股数据查询与筛选项目。
 
-- **后端**: Spring Boot 3.2.5, JDK 17, MyBatis Plus 3.5.5, MySQL 8.0
-- **前端**: Vue 3 + Element Plus
-- **构建**: Maven 多模块
-- **数据源**: Tushare Pro、东方财富 API
+当前项目仍处于规划和骨架阶段，默认以本地优先的方式推进：
 
-## 项目结构
+- 默认只查本地库
+- 本地没有数据时，不自动回源
+- 通过“按指定代码拉取”显式触发同步
 
-```
+## 仓库结构
+
+```text
 v-cash/
-├── v-cash-domain/          # 领域层 - 实体、仓储接口、领域服务
-├── v-cash-application/     # 应用层 - 用例编排、应用服务
-├── v-cash-infrastructure/  # 基础设施层 - 适配器、持久化、配置
-├── v-cash-api/             # 接口层 - REST 控制器、启动类
-├── vcash-web/              # 前端
-├── sql/init.sql            # 数据库初始化脚本
-└── docs/
-    └── openspec/           # OpenSpec 规范 - spec 定义 + 变更追踪
+├── backend/               # 单 Spring Boot 工程，按领域上下文做 DDD 分层
+├── frontend/              # Vue 3 + Element Plus 前端
+├── deployment/            # Docker Compose、Dockerfile、Nginx 配置
+├── docs/openspec/changes/ # OpenSpec change 工件
+├── sql/                   # 数据库初始化脚本
+├── README.md              # 给人看的项目介绍
+└── AGENTS.md              # 给开发和 agent 看的规则
 ```
 
-## DDD 分层规则
+## 后端架构规则
 
-- **领域层** 不依赖任何其它层
-- **应用层** 只依赖领域层
-- **基础设施层** 依赖领域层 + 应用层
-- **接口层** 依赖应用层 + 基础设施层
+后端必须遵循 DDD，但不再拆成多个 Maven 模块。
 
-关键概念：
-- 实体有唯一标识（StockBasic、StockFinancial、StockAnnouncement）
-- 仓储接口定义在领域层，实现在基础设施层
-- 领域服务处理跨聚合逻辑，应用服务编排用例
+- 后端是一个 Spring Boot 应用
+- 先按领域上下文拆分，再在上下文内部做 DDD 分层
+- 当前上下文固定为：
+  - `shared`
+  - `stockregistry`
+  - `ingestion`
+  - `financial`
+  - `announcement`
 
-## 开发规范
+每个上下文内部使用以下分层：
 
-- 代码风格：阿里巴巴 Java 开发规约
-- Git 提交：Conventional Commits 格式（feat/fix/docs/chore 等）
-- 新代码写入 DDD 多模块，不再修改 `src/` Legacy 代码
+- `domain/`
+- `application/`
+- `infrastructure/`
+- `web/`
 
-## 任务完成检查清单
+### 依赖方向
 
-每完成一个 OpenSpec 任务（tasks.md 中的一项），必须同步更新以下文件：
+- `domain` 不依赖其它层
+- `application` 只依赖 `domain`
+- `infrastructure` 实现外部适配和持久化，依赖 `domain` / `application`
+- `web` 负责 HTTP 接口，调用 `application`
 
-| 文件 | 何时更新 |
-|------|----------|
-| `docs/openspec/changes/<name>/tasks.md` | 始终：标记 `- [ ]` → `- [x]` |
-| `README.md` | 新增 API / 表结构 / 数据源 / 技术栈变更时 |
-| `AGENTS.md` | 新增约定 / 配置 / 开发规范变更时 |
-| `docs/PLAN.md` | 完成一个 Phase 时更新进度状态 |
-| `docs/openspec/` 相关 artifacts | 需求/设计/任务变更时 |
+## 项目级业务约束
 
-## 数据库
+### 股票标识
 
-- 用户：`gongbotao` / `123456`（禁止使用 root）
-- 数据库：`vcash`
-- 表：`stock_basic`、`stock_financial`、`stock_announcement`
-- 逻辑删除：`deleted` 字段（0=正常，1=删除）
-- 自动填充：`createTime`、`updateTime`
+- 股票主标识采用 `market + stock_code`
+- 不直接把用户原始输入当作主键
+- 需要支持 A 股和港股
 
-## 测试
+### 数据源策略
 
-- 框架：JUnit 5 + Mockito
-- 测试用例文档：`TEST_CASES.md`
-- 现有测试：`src/test/java/` 下 StockServiceTest、FinancialServiceTest
-- 新测试应写在对应模块的 `src/test/java/` 目录下
+- 免费优先
+- A 股 / 港股基础资料与财务数据：优先考虑东方财富
+- A 股公告：优先巨潮资讯
+- 港股公告：优先 HKEXnews
+- Tushare 作为后续增强源，不是一期主依赖
 
-## OpenSpec 规范驱动开发
+### 数据拉取策略
 
-规范文件位于 `docs/openspec/`，每个变更走 **propose → apply → archive** 三阶段：
+- 查询默认只查本地库
+- 本地缺失时不自动回源
+- 由用户手动触发“按指定代码拉取”
+- 手动同步是主链路，定时同步只是辅助能力
 
-| 阶段 | 命令 | 产出 |
-|------|------|------|
-| Propose | `openspec new change <name>` | proposal.md + specs/ + design.md + tasks.md |
-| Apply | 按 tasks.md 逐项实现 | 实现代码 + 标记任务完成 |
-| Archive | `openspec archive <name>` | 归档到 `changes/archive/` |
+### 存储策略
 
-### 工作流
+- 主存储使用 MySQL
+- 财务数据至少拆成：
+  - 股票主表
+  - 财务历史表
+  - 财务筛选快照表
+- 多指标筛选优先走快照表
+- 详情页历史财务走历史表
 
-1. **创建变更**：`npx openspec new change <kebab-case-name> --description "..."`（在工作区目录下执行时指定 `docs/openspec` 路径）
-2. **编写 artifact**：按模板完成 proposal → specs → design → tasks
-3. **实现**：按 tasks.md 逐项实现，每完成一项标记 `- [x]`
-4. **归档**：实现完成后执行 archive
+### 文档解析兜底
 
-### 文件约定
+- 当结构化财务数据拉取失败时，可以用公告或年报 PDF 解析关键指标
+- 解析结果只作为人工辅助
+- 不直接自动写入正式财务快照
+- 默认只保存文档 URL 和元信息，不做本地缓存
 
-| 文件 | 内容 | 说明 |
-|------|------|------|
-| `proposal.md` | 动机、变更范围、能力列表 | 需求变更时更新 |
-| `specs/<capability>/spec.md` | 详细需求（SHALL/MUST + 场景） | 新能力/需求变更时更新 |
-| `design.md` | 技术方案、架构决策、风险 | 方案调整时更新 |
-| `tasks.md` | 可执行任务清单（`- [ ]`） | 每完成一项标记 |
+## OpenSpec 规则
 
-## 关键约定
+OpenSpec 只维护 `docs/openspec/changes/` 下的 change 工件。
 
-- 适配器采用策略+兜底模式：按顺序尝试，返回第一个成功结果
-- 保存采用 upsert 模式：存在则更新，不存在则插入
-- 金融金额使用 `BigDecimal`
-- 端口：8089
+不再保留根级 `docs/openspec/specs/`。
+
+每个 change 目录至少包含：
+
+- `.openspec.yaml`
+- `README.md`
+- `proposal.md`
+- `design.md`
+- `tasks.md`
+- `specs/`
+
+只有真正进入执行阶段时，才新增：
+
+- `PLAN.md`
+- `review/RNN.md`
+
+## 当前能力域
+
+- `stock-registry`
+- `data-ingestion-sync`
+- `financial-screening`
+- `announcement-center`
+- `deployment`
+
+依赖关系：
+
+- `stock-registry` 是根能力域
+- `data-ingestion-sync` 依赖 `stock-registry`
+- `financial-screening` 依赖 `stock-registry` 和 `data-ingestion-sync`
+- `announcement-center` 只依赖 `stock-registry`
+- `deployment` 负责交付，不反向影响业务边界
+
+## 文档更新规则
+
+变更项目规则时更新 `AGENTS.md`。
+
+变更产品定位、能力说明或路线图时更新 `README.md`。
+
+变更某个能力域的需求、方案或任务时，只更新对应 `docs/openspec/changes/<name>/`。
