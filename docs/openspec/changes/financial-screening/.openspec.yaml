@@ -1,0 +1,13 @@
+name: financial-screening
+title: 财务筛选
+status: proposed
+summary: 支持多指标组合筛选并查看个股历史财务
+dependsOn:
+  - stock-registry
+  - data-ingestion-sync
+artifacts:
+  proposal: proposal.md
+  design: design.md
+  tasks: tasks.md
+  specs:
+    - specs/financial-screening/spec.md

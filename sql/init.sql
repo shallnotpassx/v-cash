@@ -1,2 +1,3 @@
--- v-cash database initialization script.
--- Schema definition will be added as the corresponding OpenSpec changes are implemented.
+-- v-cash bootstrap database script.
+-- The repository is currently in scaffold stage.
+-- Physical tables will be added together with each OpenSpec change implementation.

@@ -1,0 +1,12 @@
+name: data-ingestion-sync
+title: 数据拉取与同步
+status: proposed
+summary: 按指定代码触发外部数据拉取并记录同步结果
+dependsOn:
+  - stock-registry
+artifacts:
+  proposal: proposal.md
+  design: design.md
+  tasks: tasks.md
+  specs:
+    - specs/data-ingestion-sync/spec.md

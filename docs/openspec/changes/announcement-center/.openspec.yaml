@@ -1,0 +1,12 @@
+name: announcement-center
+title: 公告中心
+status: proposed
+summary: 维护公告元数据与原文链接，支持列表查询和人工解析入口
+dependsOn:
+  - stock-registry
+artifacts:
+  proposal: proposal.md
+  design: design.md
+  tasks: tasks.md
+  specs:
+    - specs/announcement-center/spec.md

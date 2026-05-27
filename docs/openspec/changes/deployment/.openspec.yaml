@@ -1,0 +1,11 @@
+name: deployment
+title: 部署
+status: proposed
+summary: 提供本地优先的交付结构，支持 Docker Compose 启动前后端和数据库
+dependsOn: []
+artifacts:
+  proposal: proposal.md
+  design: design.md
+  tasks: tasks.md
+  specs:
+    - specs/deployment/spec.md

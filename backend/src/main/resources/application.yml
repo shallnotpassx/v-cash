@@ -1,0 +1,17 @@
+server:
+  port: ${SERVER_PORT:8089}
+
+spring:
+  application:
+    name: v-cash
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+vcash:
+  stage: skeleton
+  architecture: single-spring-boot-ddd
+  query-mode: local-only-by-default

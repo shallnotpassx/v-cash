@@ -14,6 +14,7 @@
 
 ```text
 v-cash/
+├── .agents/               # 项目内 skills
 ├── backend/               # 单 Spring Boot 工程，按领域上下文做 DDD 分层
 ├── frontend/              # Vue 3 + Element Plus 前端
 ├── deployment/            # Docker Compose、Dockerfile、Nginx 配置
@@ -109,6 +110,16 @@ OpenSpec 只维护 `docs/openspec/changes/` 下的 change 工件。
 
 - `PLAN.md`
 - `review/RNN.md`
+
+## 项目内 Skills
+
+项目内自带的 skill 放在 `.agents/skills/`。
+
+当前已内置：
+
+- `.agents/skills/osd/SKILL.md`
+
+这个目录用于保存和当前仓库强相关的本地技能文件，便于和仓库一起版本化。
 
 ## 当前能力域
 

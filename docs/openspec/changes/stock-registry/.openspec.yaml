@@ -1,0 +1,11 @@
+name: stock-registry
+title: 股票主数据
+status: proposed
+summary: 统一维护 A 股和港股股票身份与基础资料
+dependsOn: []
+artifacts:
+  proposal: proposal.md
+  design: design.md
+  tasks: tasks.md
+  specs:
+    - specs/stock-registry/spec.md
