@@ -4,12 +4,24 @@ server:
 spring:
   application:
     name: v-cash
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/vcash}
+    username: ${SPRING_DATASOURCE_USERNAME:vcash}
+    password: ${SPRING_DATASOURCE_PASSWORD:vcash}
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
 
 vcash:
   stage: skeleton
