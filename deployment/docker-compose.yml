@@ -30,7 +30,7 @@ services:
         condition: service_healthy
     environment:
       SERVER_PORT: 8089
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-vcash}?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-vcash}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=utf8
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-vcash}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-vcash123}
     ports:

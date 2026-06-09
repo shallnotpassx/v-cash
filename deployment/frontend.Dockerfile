@@ -13,5 +13,6 @@ FROM nginx:1.27-alpine
 
 COPY deployment/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /workspace/frontend/dist /usr/share/nginx/html
+RUN chmod -R 755 /usr/share/nginx/html
 
 EXPOSE 80
