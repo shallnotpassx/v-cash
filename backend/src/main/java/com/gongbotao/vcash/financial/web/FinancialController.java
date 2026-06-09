@@ -22,7 +22,7 @@ public class FinancialController {
     @GetMapping("/history")
     public List<Map<String, Object>> history(@RequestParam String market,
                                               @RequestParam String code) {
-        return service.history(market, code).stream().map(r -> Map.of(
+        return service.history(market, code).stream().map(r -> Map.<String, Object>of(
                 "market", r.stockIdentity().market(),
                 "stockCode", r.stockIdentity().stockCode(),
                 "period", r.period(),
@@ -43,7 +43,7 @@ public class FinancialController {
         var list = hasFilter
                 ? service.filterSnapshots(minRevenue, minNetProfit, minRoe, minEps)
                 : service.snapshots();
-        return list.stream().map(s -> Map.of(
+        return list.stream().map(s -> Map.<String, Object>of(
                 "market", s.stockIdentity().market(),
                 "stockCode", s.stockIdentity().stockCode(),
                 "latestPeriod", s.latestPeriod(),

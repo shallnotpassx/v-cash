@@ -37,7 +37,7 @@ public class SyncLogController {
     }
 
     private Map<String, Object> toLogMap(SyncLog log) {
-        return Map.of(
+        return Map.<String, Object>of(
                 "id", log.id(),
                 "market", log.stockIdentity().market(),
                 "stockCode", log.stockIdentity().stockCode(),
